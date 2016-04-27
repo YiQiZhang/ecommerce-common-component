@@ -19,11 +19,18 @@ interface CartItemContract extends Promotable
     /**
      * 更新购物车项选中状态
      *
-     * @param $status
+     * @param bool $status
      *
      * @return bool
      */
     public function select($status);
+
+    /**
+     * 重新刷新模型
+     *
+     * @return void
+     */
+    public function renew();
 
     /********************************** 查询方法 **************************/
     /**
@@ -32,20 +39,6 @@ interface CartItemContract extends Promotable
      * @return string
      */
     public function uniqueKey();
-
-    /**
-     * 该购物车项数量
-     *
-     * @return int
-     */
-    public function quantity();
-
-    /**
-     * 选中状态
-     *
-     * @return bool
-     */
-    public function isSelected();
 
     /**
      * 标题
@@ -69,11 +62,39 @@ interface CartItemContract extends Promotable
     public function type();
 
     /**
+     * 此购物车项是否还在生效
+     *
+     * @return bool
+     */
+    public function onsale();
+
+    /**
      * 是否有多个实体在此项中
      *
      * @return bool
      */
     public function isMultiple();
+
+    /**
+     * 选中状态
+     *
+     * @return bool
+     */
+    public function isSelected();
+
+    /**
+     * 是否购物车中原始的商品, 还是经过filter之后生成的商品
+     *
+     * @return bool
+     */
+    public function isOriginal();
+
+    /**
+     * 该购物车项数量
+     *
+     * @return int
+     */
+    public function quantity();
 
     /**
      * 单位该购物车项的商品数量
@@ -118,7 +139,7 @@ interface CartItemContract extends Promotable
     public function point();
 
     /**
-     * @return mixed
+     * @return array
      */
     public function output();
 

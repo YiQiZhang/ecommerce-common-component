@@ -2,11 +2,26 @@
 
 namespace TechTree\Ecommerce\Cart\Contracts;
 
-use Iterator;
-
 interface CartContract
 {
     /********************************** 修改方法(会修改购物车) **************************/
+    /**
+     * 恢复存储在storage中的购物车
+     *
+     * @param string $cartUniqueKey
+     *
+     * @return void
+     */
+    public function restore($cartUniqueKey = '');
+
+    /**
+     * 将购物车当前状态存储到storage中的购物车
+     *
+     * @param string $cartUniqueKey
+     *
+     * @return void
+     */
+    public function save($cartUniqueKey = '');
 
     /**
      * 加入一个购物车项
@@ -20,31 +35,31 @@ interface CartContract
     /**
      * 更新一个购物车项的数量
      *
-     * @param string $uniqueKey
+     * @param string $itemUniqueKey
      * @param int $quantity
      *
      * @return bool
      */
-    public function updateQuantity($uniqueKey, $quantity);
+    public function updateQuantity($itemUniqueKey, $quantity);
 
     /**
      * 选中或不选一个购物车项
      *
-     * @param string $uniqueKey
+     * @param string $itemUniqueKey
      * @param bool $status
      *
      * @return bool
      */
-    public function select($uniqueKey, $status = true);
+    public function select($itemUniqueKey, $status = true);
 
     /**
      * 移除一个或多个购物车项
      *
-     * @param string|string[] $uniqueKey
+     * @param string|string[] $itemUniqueKeys
      *
      * @return bool
      */
-    public function remove($uniqueKey);
+    public function remove($itemUniqueKeys);
 
     /**
      * 清空购物车
@@ -64,6 +79,11 @@ interface CartContract
 
     /********************************** 查询方法(不会变更购物车) **************************/
     /**
+     * @return StorageProviderContract
+     */
+    public function storage();
+
+    /**
      * 购物车唯一标识
      *
      * @return string
@@ -73,29 +93,29 @@ interface CartContract
     /**
      * 是否有一个购物车项
      *
-     * @param string $uniqueKey
+     * @param string $itemUniqueKey
      *
      * @return bool
      */
-    public function hasItem($uniqueKey);
+    public function hasItem($itemUniqueKey);
 
     /**
      * 获取一个购物车项的数量
      *
-     * @param string $uniqueKey
+     * @param string $itemUniqueKey
      *
      * @return int
      */
-    public function quantity($uniqueKey);
+    public function quantity($itemUniqueKey);
 
     /**
      * 是否选中一个购物车项
      *
-     * @param string $uniqueKey
+     * @param string $itemUniqueKey
      *
      * @return bool
      */
-    public function isSelected($uniqueKey);
+    public function isSelected($itemUniqueKey);
 
     /**
      * 购物车项总数量
@@ -134,22 +154,14 @@ interface CartContract
     public function categoryIds($onlySelected = false);
 
     /**
-     * 购物车展示数据
+     * 购物车数据输出
      *
      * @param bool|false $onlySelected
+     * @param FilterContract[] $filters
      *
      * @return mixed
      */
-    public function output($onlySelected = false);
-
-    /**
-     * 购物车结算数据
-     *
-     * @param bool|true $onlySelected
-     *
-     * @return mixed
-     */
-    public function checkout($onlySelected = true);
+    public function output($onlySelected = false, $filters = []);
 
     /********************************** 查询且有可能修改方法 **************************/
     /**
@@ -160,9 +172,9 @@ interface CartContract
     public function items($onlySelected = false);
 
     /**
-     * @param string $itemKey
+     * @param string $itemUniqueKey
      *
      * @return CartItemContract
      */
-    public function item($itemKey);
+    public function item($itemUniqueKey);
 }

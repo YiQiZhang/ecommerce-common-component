@@ -30,7 +30,7 @@ interface PromotionContract extends PromotionType
     /**
      * 价格优惠
      *
-     * @param $originalPrice
+     * @param float $originalPrice
      *
      * @return float 新价格
      */
@@ -39,9 +39,23 @@ interface PromotionContract extends PromotionType
     /**
      * 积分优惠
      *
-     * @param $originalPoint
+     * @param int $originalPoint
      *
      * @return int 新积分
      */
     public function pointPromotion($originalPoint);
+
+    /**
+     * 需要向外传递的数据
+     *
+     * @return mixed
+     */
+    public function promotionData();
+
+    /**
+     * 数据格式化
+     *
+     * @return array
+     */
+    public function output();
 }

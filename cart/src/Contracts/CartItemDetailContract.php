@@ -2,10 +2,38 @@
 
 namespace TechTree\Ecommerce\Cart\Contracts;
 
-use TechTree\Ecommerce\Cart\Interfaces\Promotable;
-
-interface CartItemDetailContract extends Promotable
+interface CartItemDetailContract
 {
+    /********************************** 修改方法 **************************/
+    /**
+     * 重新刷新模型
+     *
+     * @return mixed
+     */
+    public function renew();
+
+    /********************************** 查询方法 **************************/
+    /**
+     * 在售状态
+     *
+     * @return bool
+     */
+    public function onsale();
+
+    /**
+     * 货物id
+     *
+     * @return int
+     */
+    public function goodsId();
+
+    /**
+     * 目录id
+     *
+     * @return int
+     */
+    public function categoryId();
+
     /**
      * 标题
      *
@@ -19,13 +47,6 @@ interface CartItemDetailContract extends Promotable
      * @return string
      */
     public function cover();
-
-    /**
-     * 固有数量单位
-     *
-     * @return int
-     */
-    public function quantity();
 
     /**
      * 原价
@@ -42,9 +63,16 @@ interface CartItemDetailContract extends Promotable
     public function price();
 
     /**
-     * 总价
+     * 积分
      *
-     * @return float
+     * @return int
      */
-    public function total();
+    public function point();
+
+    /**
+     * 输出基本信息
+     *
+     * @return array
+     */
+    public function output();
 }
