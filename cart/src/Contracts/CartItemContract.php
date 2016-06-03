@@ -2,9 +2,10 @@
 
 namespace TechTree\Ecommerce\Cart\Contracts;
 
+use TechTree\Ecommerce\Cart\Interfaces\CartItemType;
 use TechTree\Ecommerce\Cart\Interfaces\Promotable;
 
-interface CartItemContract extends Promotable
+interface CartItemContract extends Promotable, CartItemType
 {
     /********************************** 修改方法 **************************/
     /**
@@ -33,6 +34,13 @@ interface CartItemContract extends Promotable
     public function renew();
 
     /********************************** 查询方法 **************************/
+    /**
+     * 是否可选中,修改数量
+     *
+     * @return bool
+     */
+    public function modifiable();
+
     /**
      * 唯一标识
      *
@@ -90,6 +98,13 @@ interface CartItemContract extends Promotable
     public function isOriginal();
 
     /**
+     * 该购物车项是否含有虚拟商品
+     *
+     * @return bool
+     */
+    public function hasVirtualDetail();
+
+    /**
      * 该购物车项数量
      *
      * @return int
@@ -104,11 +119,25 @@ interface CartItemContract extends Promotable
     public function goodsCount();
 
     /**
-     * 该购物车项包含的所有商品的id
+     * 该购物车项包含的所有goods的id
      *
      * @return array
      */
     public function goodsIds();
+
+    /**
+     * 该购物车项包含的所有goods_sku的id
+     *
+     * @return array
+     */
+    public function goodsSkuIds();
+
+    /**
+     * 该购物车项包含的所有product的id
+     *
+     * @return array
+     */
+    public function productIds();
 
     /**
      * 该购物车项包含的所有商品的目录id
@@ -147,7 +176,7 @@ interface CartItemContract extends Promotable
     /**
      * 购物车项的明细
      *
-     * @return mixed
+     * @return CartItemDetailContract|CartItemContract[]
      */
     public function detail();
 }

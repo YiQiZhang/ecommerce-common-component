@@ -2,19 +2,29 @@
 
 namespace TechTree\Ecommerce\Cart\Providers;
 
+use Carbon\Carbon;
+use Predis\Client;
 use TechTree\Ecommerce\Cart\Contracts\StorageProviderContract;
-use Predis\ClientInterface;
 
 class RedisStorageProvider implements StorageProviderContract
 {
+    const CART_HASH_KEY = 'cart:hash:expire';
+
     /**
-     * @var ClientInterface
+     * @var Client
      */
     protected $connection;
 
-    public function __construct($keyPrefix)
+    protected $keyPrefix;
+
+    public function __construct($database = '', $keyPrefix = '')
     {
-        $this->connection = app('redis');
+        $this->keyPrefix = $keyPrefix;
+        if (!empty($database)) {
+            $this->connection = app('redis')->connection($database);
+        } else {
+            $this->connection = app('redis');
+        }
     }
 
     /**
@@ -24,9 +34,16 @@ class RedisStorageProvider implements StorageProviderContract
      *
      * @return bool
      */
-    public function save($cartUniqueKey, $data, $ttl)
+    public function save($cartUniqueKey, &$data, $ttl)
     {
-        return $this->connection->setex($cartUniqueKey, $ttl, $data);
+        $this->connection->pipeline(['atomic' => true], function($pipe) use ($cartUniqueKey, &$data, $ttl){
+            /** @var Client $pipe */
+            $pipe->setex($cartUniqueKey, $ttl, $data);
+            $expire = Carbon::now()->timestamp + $ttl;
+            $pipe->hset(self::CART_HASH_KEY, $cartUniqueKey, $expire);
+        });
+
+        return true;
     }
 
     /**
@@ -46,6 +63,18 @@ class RedisStorageProvider implements StorageProviderContract
      */
     public function remove($cartUniqueKey)
     {
-        $this->connection->del($cartUniqueKey);
+        $this->connection->pipeline(['atomic' => true], function($pipe) use (&$cartUniqueKey){
+            /** @var Client $pipe */
+            $pipe->del($cartUniqueKey);
+            $pipe->hdel(self::CART_HASH_KEY, $cartUniqueKey);
+        });
+    }
+
+    /**
+     * @return string[]
+     */
+    public function all()
+    {
+        return $this->connection->hkeys(self::CART_HASH_KEY);
     }
 }

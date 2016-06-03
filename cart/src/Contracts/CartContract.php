@@ -2,6 +2,8 @@
 
 namespace TechTree\Ecommerce\Cart\Contracts;
 
+use TechTree\Ecommerce\Cart\Models\Counter;
+
 interface CartContract
 {
     /********************************** 修改方法(会修改购物车) **************************/
@@ -79,6 +81,27 @@ interface CartContract
 
     /********************************** 查询方法(不会变更购物车) **************************/
     /**
+     * 已登陆时购物车保存时间
+     *
+     * @return int
+     */
+    public function userTTL();
+
+    /**
+     * 未登陆时购物车保存时间
+     *
+     * @return int
+     */
+    public function guestTTL();
+
+    /**
+     * 是否已经登录
+     *
+     * @return bool
+     */
+    public function isLogin();
+
+    /**
      * @return StorageProviderContract
      */
     public function storage();
@@ -89,6 +112,20 @@ interface CartContract
      * @return string
      */
     public function uniqueKey();
+
+    /**
+     * 已登录时的唯一识别串
+     *
+     * @return string
+     */
+    public function userUniqueKey();
+
+    /**
+     * 未登录时的唯一识别串
+     *
+     * @return string
+     */
+    public function guestUniqueKey();
 
     /**
      * 是否有一个购物车项
@@ -145,6 +182,24 @@ interface CartContract
     public function goodsIds($onlySelected = false);
 
     /**
+     * 购物车内包含的所有goods_sku的id
+     *
+     * @param bool $onlySelected
+     *
+     * @return array
+     */
+    public function goodsSkuIds($onlySelected = false);
+
+    /**
+     * 购物车内包含的所有product的id
+     *
+     * @param bool $onlySelected
+     *
+     * @return array
+     */
+    public function productIds($onlySelected = false);
+
+    /**
      * 购物车内包含的所有商品的目录id
      *
      * @param bool $onlySelected
@@ -154,14 +209,14 @@ interface CartContract
     public function categoryIds($onlySelected = false);
 
     /**
-     * 购物车数据输出
+     * 执行结算
      *
      * @param bool|false $onlySelected
-     * @param FilterContract[] $filters
+     * @param CounterFilterContract[]      $filters
      *
-     * @return mixed
+     * @return Counter
      */
-    public function output($onlySelected = false, $filters = []);
+    public function checkout($onlySelected = false, $filters = []);
 
     /********************************** 查询且有可能修改方法 **************************/
     /**

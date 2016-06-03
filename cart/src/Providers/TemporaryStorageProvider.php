@@ -13,7 +13,7 @@ class TemporaryStorageProvider implements StorageProviderContract
      *
      * @return bool
      */
-    public function save($cartUniqueKey, $data, $ttl)
+    public function save($cartUniqueKey, &$data, $ttl)
     {
         return ;
     }
@@ -36,5 +36,15 @@ class TemporaryStorageProvider implements StorageProviderContract
     public function remove($cartUniqueKey)
     {
         return ;
+    }
+
+    /**
+     * 所有保存在该Provider的购物车的uniqueKey名
+     *
+     * @return string[]
+     */
+    public function all()
+    {
+        return [];
     }
 }

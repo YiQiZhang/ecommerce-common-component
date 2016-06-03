@@ -2,9 +2,10 @@
 
 namespace TechTree\Ecommerce\Cart\Contracts;
 
+use TechTree\Ecommerce\Cart\Interfaces\PromotionCreator;
 use TechTree\Ecommerce\Cart\Interfaces\PromotionType;
 
-interface PromotionContract extends PromotionType
+interface PromotionContract extends PromotionType, PromotionCreator
 {
     /**
      * 促销唯一标识, 用于内部识别促销
@@ -14,11 +15,25 @@ interface PromotionContract extends PromotionType
     public function uniqueKey();
 
     /**
-     * 促销名称
+     * 创建者名称
      *
      * @return string
      */
-    public function title();
+    public function creator();
+
+    /**
+     * 与此促销相关id
+     *
+     * @return int
+     */
+    public function relationId();
+
+    /**
+     * 与此促销相关的额外数据
+     *
+     * @return array
+     */
+    public function externalData();
 
     /**
      * 促销类型
@@ -46,7 +61,7 @@ interface PromotionContract extends PromotionType
     public function pointPromotion($originalPoint);
 
     /**
-     * 需要向外传递的数据
+     * 需要向外传递的一个关键数据
      *
      * @return mixed
      */

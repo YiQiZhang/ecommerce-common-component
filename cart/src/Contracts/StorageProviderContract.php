@@ -11,7 +11,7 @@ interface StorageProviderContract
      *
      * @return bool
      */
-    public function save($cartUniqueKey, $data, $ttl);
+    public function save($cartUniqueKey, &$data, $ttl);
 
     /**
      * @param string $cartUniqueKey
@@ -26,4 +26,11 @@ interface StorageProviderContract
      * @return void
      */
     public function remove($cartUniqueKey);
+
+    /**
+     * 所有保存在该Provider的购物车的uniqueKey名
+     *
+     * @return string[]
+     */
+    public function all();
 }

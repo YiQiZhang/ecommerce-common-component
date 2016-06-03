@@ -21,18 +21,26 @@ interface CartItemDetailContract
     public function onsale();
 
     /**
-     * 货物id
-     *
      * @return int
      */
     public function goodsId();
+
+    /**
+     * @return int
+     */
+    public function goodsSkuId();
+
+    /**
+     * @return int
+     */
+    public function productId();
 
     /**
      * 目录id
      *
      * @return int
      */
-    public function categoryId();
+    public function categoryIds();
 
     /**
      * 标题
@@ -47,6 +55,20 @@ interface CartItemDetailContract
      * @return string
      */
     public function cover();
+
+    /**
+     * 商品类型
+     *
+     * @return int
+     */
+    public function type();
+
+    /**
+     * 商品用途类型
+     *
+     * @return int
+     */
+    public function productionType();
 
     /**
      * 原价
